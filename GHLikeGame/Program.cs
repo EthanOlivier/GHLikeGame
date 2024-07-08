@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace GHLikeGame
@@ -16,7 +13,13 @@ namespace GHLikeGame
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Main());
+
+            //IFileRead _fileRead = new FileRead();
+            //string[] fileContents = _fileRead.ReadFileContents();
+            //INotesDisplay _notesDisplay = new NotesDisplay(fileContents);
+            //_notesDisplay.StartDisplayingNotes();
+
+            Application.Run(new FormSetup());
         }
     }
 }

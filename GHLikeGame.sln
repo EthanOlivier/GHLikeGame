@@ -9,6 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		..\GH Backup\F.png = ..\GH Backup\F.png
 		..\GH Backup\J.png = ..\GH Backup\J.png
+		SongNotes.txt = SongNotes.txt
 		..\GH Backup\tomp3.cc - Goukisan  Betrayal of Fear.wav = ..\GH Backup\tomp3.cc - Goukisan  Betrayal of Fear.wav
 		..\GH Backup\youtube-video-gif.gif = ..\GH Backup\youtube-video-gif.gif
 	EndProjectSection
