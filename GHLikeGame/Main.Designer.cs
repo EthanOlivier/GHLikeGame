@@ -41,6 +41,7 @@ namespace GHLikeGame
             this.Background = new System.Windows.Forms.PictureBox();
             this.tmrDropDown = new System.Windows.Forms.Timer(this.components);
             this.tmrBetweenNotes = new System.Windows.Forms.Timer(this.components);
+            this.lblPercent = new System.Windows.Forms.Label();
             this.lblScore = new System.Windows.Forms.Label();
             this.GPBackground.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.KKey)).BeginInit();
@@ -131,15 +132,26 @@ namespace GHLikeGame
             this.tmrBetweenNotes.Interval = 500;
             this.tmrBetweenNotes.Tick += new System.EventHandler(this.DisplayNotes);
             // 
+            // lblPercent
+            // 
+            this.lblPercent.BackColor = System.Drawing.Color.Transparent;
+            this.lblPercent.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblPercent.Location = new System.Drawing.Point(650, 175);
+            this.lblPercent.Name = "lblPercent";
+            this.lblPercent.Size = new System.Drawing.Size(150, 100);
+            this.lblPercent.TabIndex = 2;
+            this.lblPercent.Text = "100.00%";
+            this.lblPercent.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // lblScore
             // 
             this.lblScore.BackColor = System.Drawing.Color.Transparent;
-            this.lblScore.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblScore.Location = new System.Drawing.Point(650, 175);
+            this.lblScore.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblScore.Location = new System.Drawing.Point(668, 280);
             this.lblScore.Name = "lblScore";
-            this.lblScore.Size = new System.Drawing.Size(150, 100);
-            this.lblScore.TabIndex = 2;
-            this.lblScore.Text = "100.00%";
+            this.lblScore.Size = new System.Drawing.Size(120, 80);
+            this.lblScore.TabIndex = 6;
+            this.lblScore.Text = "0 / 0";
             this.lblScore.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // FormSetup
@@ -148,6 +160,7 @@ namespace GHLikeGame
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.lblScore);
+            this.Controls.Add(this.lblPercent);
             this.Controls.Add(this.GPBackground);
             this.Controls.Add(this.Background);
             this.MaximizeBox = false;
@@ -174,9 +187,10 @@ namespace GHLikeGame
         private PictureBox FKey;
         private Timer tmrDropDown;
         private Timer tmrBetweenNotes;
-        private Label lblScore;
+        private Label lblPercent;
         private PictureBox DKey;
         private PictureBox KKey;
+        private Label lblScore;
     }
 }
 

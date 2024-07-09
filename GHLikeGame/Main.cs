@@ -39,6 +39,8 @@ public partial class FormSetup : Form
     {
         GPBackground.Parent = Background;
         GPBackground.BackColor = Color.FromArgb(100, 13, 50, 81);
+        lblPercent.Parent = Background;
+        lblPercent.BackColor = Color.FromArgb(240, 13, 50, 81);
         lblScore.Parent = Background;
         lblScore.BackColor = Color.FromArgb(240, 13, 50, 81);
 
@@ -80,7 +82,6 @@ public partial class FormSetup : Form
 
             newNote.BackColor = Color.FromArgb(61, 91, 116);
             newNote.Location = new Point(255, 0);
-            newNote.Name = "DNote";
             newNote.Size = new Size(65, 65);
             newNote.TabIndex = 6;
             newNote.TabStop = false;
@@ -97,8 +98,7 @@ public partial class FormSetup : Form
             PictureBox newNote = new PictureBox();
 
             newNote.BackColor = Color.FromArgb(13, 50, 81);
-            newNote.Location = new Point(330, 0); 
-            newNote.Name = "FNote";
+            newNote.Location = new Point(330, 0);
             newNote.Size = new Size(65, 65);
             newNote.TabIndex = 2;
             newNote.TabStop = false;
@@ -116,7 +116,6 @@ public partial class FormSetup : Form
 
             newNote.BackColor = Color.FromArgb(37, 71, 98);
             newNote.Location = new Point(405, 0);
-            newNote.Name = "JNote";
             newNote.Size = new Size(65, 65);
             newNote.TabIndex = 3;
             newNote.TabStop = false;
@@ -134,7 +133,6 @@ public partial class FormSetup : Form
 
             newNote.BackColor = Color.FromArgb(86, 112, 133);
             newNote.Location = new Point(480, 0);
-            newNote.Name = "KNote";
             newNote.Size = new Size(65, 65);
             newNote.TabIndex = 7;
             newNote.TabStop = false;
@@ -160,7 +158,8 @@ public partial class FormSetup : Form
             else
             {
                 PossibleHits++;
-                lblScore.Text = (Convert.ToDouble(Hits) / PossibleHits * 100).ToString("N2") + "%";
+                lblPercent.Text = (Convert.ToDouble(Hits) / PossibleHits * 100).ToString("N2") + "%";
+                lblScore.Text = Hits.ToString() + " / " + PossibleHits.ToString();
                 note.Visible = false;
                 note.Location = new Point(note.Location.X, 0);
                 ActiveNotes.Remove(note);
@@ -230,7 +229,8 @@ public partial class FormSetup : Form
                 DNotes.Remove(DNotes[0]);
                 PossibleHits++;
                 Hits++;
-                lblScore.Text = (Convert.ToDouble(Hits) / PossibleHits * 100).ToString("N2") + "%";
+                lblPercent.Text = (Convert.ToDouble(Hits) / PossibleHits * 100).ToString("N2") + "%";
+                lblScore.Text = Hits.ToString() + " / " + PossibleHits.ToString();
             }
         }
         else if (e.KeyCode == Keys.F)
@@ -243,7 +243,8 @@ public partial class FormSetup : Form
                 FNotes.Remove(FNotes[0]);
                 PossibleHits++;
                 Hits++;
-                lblScore.Text = (Convert.ToDouble(Hits) / PossibleHits * 100).ToString("N2") + "%";
+                lblPercent.Text = (Convert.ToDouble(Hits) / PossibleHits * 100).ToString("N2") + "%";
+                lblScore.Text = Hits.ToString() + " / " + PossibleHits.ToString();
             }
         }
         else if (e.KeyCode == Keys.J)
@@ -256,7 +257,8 @@ public partial class FormSetup : Form
                 JNotes.Remove(JNotes[0]);
                 PossibleHits++;
                 Hits++;
-                lblScore.Text = (Convert.ToDouble(Hits) / PossibleHits * 100).ToString("N2") + "%";
+                lblPercent.Text = (Convert.ToDouble(Hits) / PossibleHits * 100).ToString("N2") + "%";
+                lblScore.Text = Hits.ToString() + " / " + PossibleHits.ToString();
             }
         }
         else if (e.KeyCode == Keys.K)
@@ -269,7 +271,8 @@ public partial class FormSetup : Form
                 KNotes.Remove(KNotes[0]);
                 PossibleHits++;
                 Hits++;
-                lblScore.Text = (Convert.ToDouble(Hits) / PossibleHits * 100).ToString("N2") + "%";
+                lblPercent.Text = (Convert.ToDouble(Hits) / PossibleHits * 100).ToString("N2") + "%";
+                lblScore.Text = Hits.ToString() + " / " + PossibleHits.ToString();
             }
         }
     }
