@@ -34,12 +34,8 @@ namespace GHLikeGame
         {
             this.components = new System.ComponentModel.Container();
             this.GPBackground = new System.Windows.Forms.Panel();
-            this.KNote = new System.Windows.Forms.PictureBox();
-            this.DNote = new System.Windows.Forms.PictureBox();
             this.KKey = new System.Windows.Forms.PictureBox();
             this.DKey = new System.Windows.Forms.PictureBox();
-            this.JNote = new System.Windows.Forms.PictureBox();
-            this.FNote = new System.Windows.Forms.PictureBox();
             this.JKey = new System.Windows.Forms.PictureBox();
             this.FKey = new System.Windows.Forms.PictureBox();
             this.Background = new System.Windows.Forms.PictureBox();
@@ -47,12 +43,8 @@ namespace GHLikeGame
             this.tmrBetweenNotes = new System.Windows.Forms.Timer(this.components);
             this.lblScore = new System.Windows.Forms.Label();
             this.GPBackground.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.KNote)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.DNote)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.KKey)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DKey)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.JNote)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.FNote)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.JKey)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.FKey)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Background)).BeginInit();
@@ -60,12 +52,8 @@ namespace GHLikeGame
             // 
             // GPBackground
             // 
-            this.GPBackground.Controls.Add(this.KNote);
-            this.GPBackground.Controls.Add(this.DNote);
             this.GPBackground.Controls.Add(this.KKey);
             this.GPBackground.Controls.Add(this.DKey);
-            this.GPBackground.Controls.Add(this.JNote);
-            this.GPBackground.Controls.Add(this.FNote);
             this.GPBackground.Controls.Add(this.JKey);
             this.GPBackground.Controls.Add(this.FKey);
             this.GPBackground.Location = new System.Drawing.Point(150, 0);
@@ -73,26 +61,6 @@ namespace GHLikeGame
             this.GPBackground.Size = new System.Drawing.Size(500, 450);
             this.GPBackground.TabIndex = 1;
             this.GPBackground.Paint += new System.Windows.Forms.PaintEventHandler(this.GPBackground_Paint);
-            // 
-            // KNote
-            // 
-            this.KNote.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(86)))), ((int)(((byte)(112)))), ((int)(((byte)(133)))));
-            this.KNote.Location = new System.Drawing.Point(325, 0);
-            this.KNote.Name = "KNote";
-            this.KNote.Size = new System.Drawing.Size(75, 75);
-            this.KNote.TabIndex = 7;
-            this.KNote.TabStop = false;
-            this.KNote.Visible = false;
-            // 
-            // DNote
-            // 
-            this.DNote.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(61)))), ((int)(((byte)(91)))), ((int)(((byte)(116)))));
-            this.DNote.Location = new System.Drawing.Point(100, 0);
-            this.DNote.Name = "DNote";
-            this.DNote.Size = new System.Drawing.Size(75, 75);
-            this.DNote.TabIndex = 6;
-            this.DNote.TabStop = false;
-            this.DNote.Visible = false;
             // 
             // KKey
             // 
@@ -117,26 +85,6 @@ namespace GHLikeGame
             this.DKey.TabIndex = 4;
             this.DKey.TabStop = false;
             this.DKey.Paint += new System.Windows.Forms.PaintEventHandler(this.Keys_Paint);
-            // 
-            // JNote
-            // 
-            this.JNote.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(71)))), ((int)(((byte)(98)))));
-            this.JNote.Location = new System.Drawing.Point(250, 0);
-            this.JNote.Name = "JNote";
-            this.JNote.Size = new System.Drawing.Size(75, 75);
-            this.JNote.TabIndex = 3;
-            this.JNote.TabStop = false;
-            this.JNote.Visible = false;
-            // 
-            // FNote
-            // 
-            this.FNote.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(13)))), ((int)(((byte)(50)))), ((int)(((byte)(81)))));
-            this.FNote.Location = new System.Drawing.Point(175, 0);
-            this.FNote.Name = "FNote";
-            this.FNote.Size = new System.Drawing.Size(75, 75);
-            this.FNote.TabIndex = 2;
-            this.FNote.TabStop = false;
-            this.FNote.Visible = false;
             // 
             // JKey
             // 
@@ -180,7 +128,7 @@ namespace GHLikeGame
             // 
             // tmrBetweenNotes
             // 
-            this.tmrBetweenNotes.Interval = 1500;
+            this.tmrBetweenNotes.Interval = 500;
             this.tmrBetweenNotes.Tick += new System.EventHandler(this.DisplayNotes);
             // 
             // lblScore
@@ -209,12 +157,8 @@ namespace GHLikeGame
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.KeysPressed);
             this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.KeysReleased);
             this.GPBackground.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.KNote)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.DNote)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.KKey)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.DKey)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.JNote)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.FNote)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.JKey)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.FKey)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Background)).EndInit();
@@ -228,15 +172,11 @@ namespace GHLikeGame
         private Panel GPBackground;
         private PictureBox JKey;
         private PictureBox FKey;
-        private PictureBox JNote;
-        private PictureBox FNote;
         private Timer tmrDropDown;
         private Timer tmrBetweenNotes;
         private Label lblScore;
         private PictureBox DKey;
         private PictureBox KKey;
-        private PictureBox KNote;
-        private PictureBox DNote;
     }
 }
 

@@ -4,12 +4,17 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.IO;
 using System.Media;
+using System.Linq;
 
 namespace GHLikeGame;
 
 public partial class FormSetup : Form
 {
-    List<PictureBox> Notes = new List<PictureBox>();
+    List<PictureBox> ActiveNotes = new List<PictureBox>();
+    List<PictureBox> DNotes = new List<PictureBox>();
+    List<PictureBox> FNotes = new List<PictureBox>();
+    List<PictureBox> JNotes = new List<PictureBox>();
+    List<PictureBox> KNotes = new List<PictureBox>();
     string[] FileContents;
     int FileLine = 0;
     int Hits = 0;
@@ -71,31 +76,83 @@ public partial class FormSetup : Form
     {
         if (note == "D")
         {
-            DNote.Visible = true;
-            Notes.Add(DNote);
+            PictureBox newNote = new PictureBox();
+
+            newNote.BackColor = Color.FromArgb(61, 91, 116);
+            newNote.Location = new Point(255, 0);
+            newNote.Name = "DNote";
+            newNote.Size = new Size(65, 65);
+            newNote.TabIndex = 6;
+            newNote.TabStop = false;
+            newNote.Visible = true;
+
+            DNotes.Add(newNote);
+            ActiveNotes.Add(newNote);
+
+            this.Controls.Add(newNote);
+            newNote.BringToFront();
         }
         else if (note == "F")
         {
-            FNote.Visible = true;
-            Notes.Add(FNote);
+            PictureBox newNote = new PictureBox();
+
+            newNote.BackColor = Color.FromArgb(13, 50, 81);
+            newNote.Location = new Point(330, 0); 
+            newNote.Name = "FNote";
+            newNote.Size = new Size(65, 65);
+            newNote.TabIndex = 2;
+            newNote.TabStop = false;
+            newNote.Visible = true;
+
+            FNotes.Add(newNote);
+            ActiveNotes.Add(newNote);
+
+            this.Controls.Add(newNote);
+            newNote.BringToFront();
         }
         else if (note == "J")
         {
-            JNote.Visible = true;
-            Notes.Add(JNote);
+            PictureBox newNote = new PictureBox();
+
+            newNote.BackColor = Color.FromArgb(37, 71, 98);
+            newNote.Location = new Point(405, 0);
+            newNote.Name = "JNote";
+            newNote.Size = new Size(65, 65);
+            newNote.TabIndex = 3;
+            newNote.TabStop = false;
+            newNote.Visible = true;
+            
+            JNotes.Add(newNote);
+            ActiveNotes.Add(newNote);
+
+            this.Controls.Add(newNote);
+            newNote.BringToFront();
         }
         else if (note == "K")
         {
-            KNote.Visible = true;
-            Notes.Add(KNote);
+            PictureBox newNote = new PictureBox();
+
+            newNote.BackColor = Color.FromArgb(86, 112, 133);
+            newNote.Location = new Point(480, 0);
+            newNote.Name = "KNote";
+            newNote.Size = new Size(65, 65);
+            newNote.TabIndex = 7;
+            newNote.TabStop = false;
+            newNote.Visible = true;
+
+            KNotes.Add(newNote);
+            ActiveNotes.Add(newNote);
+
+            this.Controls.Add(newNote);
+            newNote.BringToFront();
         }
     }
 
     private void NotesDropper(object sender, EventArgs e)
     {
-        for (int i = 0; i < Notes.Count; i++)
+        for (int i = 0; i < ActiveNotes.Count; i++)
         {
-            var note = Notes[i];
+            var note = ActiveNotes[i];
             if (note.Bottom < this.ClientSize.Height + note.Size.Height)
             {
                 note.Location = new Point(note.Location.X, note.Location.Y + 8);
@@ -106,7 +163,24 @@ public partial class FormSetup : Form
                 lblScore.Text = (Convert.ToDouble(Hits) / PossibleHits * 100).ToString("N2") + "%";
                 note.Visible = false;
                 note.Location = new Point(note.Location.X, 0);
-                Notes.Remove(note);
+                ActiveNotes.Remove(note);
+
+                if (DNotes.Contains(note))
+                {
+                    DNotes.Remove(note);
+                }
+                else if (FNotes.Contains(note))
+                {
+                    FNotes.Remove(note);
+                }
+                else if(JNotes.Contains(note))
+                {
+                    JNotes.Remove(note);
+                }
+                else if(KNotes.Contains(note))
+                {
+                    KNotes.Remove(note);
+                }
             }
         }
     }
@@ -149,11 +223,11 @@ public partial class FormSetup : Form
         if (e.KeyCode == Keys.D)
         {
             DKey.BackColor = Color.FromArgb(43, 64, 81);
-            if (DNote.Bottom > DKey.Top)
+            if (DNotes.Any() && DNotes[0].Bottom > DKey.Top)
             {
-                DNote.Visible = false;
-                DNote.Location = new Point(DNote.Location.X, 0);
-                Notes.Remove(DNote);
+                DNotes[0].Visible = false;
+                ActiveNotes.Remove(DNotes[0]);
+                DNotes.Remove(DNotes[0]);
                 PossibleHits++;
                 Hits++;
                 lblScore.Text = (Convert.ToDouble(Hits) / PossibleHits * 100).ToString("N2") + "%";
@@ -162,11 +236,11 @@ public partial class FormSetup : Form
         else if (e.KeyCode == Keys.F)
         {
             FKey.BackColor = Color.FromArgb(26, 39, 60);
-            if (FNote.Bottom > FKey.Top)
+            if (FNotes.Any() && FNotes[0].Bottom > FKey.Top)
             {
-                FNote.Visible = false;
-                FNote.Location = new Point(FNote.Location.X, 0);
-                Notes.Remove(FNote);
+                FNotes[0].Visible = false;
+                ActiveNotes.Remove(FNotes[0]);
+                FNotes.Remove(FNotes[0]);
                 PossibleHits++;
                 Hits++;
                 lblScore.Text = (Convert.ToDouble(Hits) / PossibleHits * 100).ToString("N2") + "%";
@@ -175,11 +249,11 @@ public partial class FormSetup : Form
         else if (e.KeyCode == Keys.J)
         {
             JKey.BackColor = Color.FromArgb(30, 57, 78);
-            if (JNote.Bottom > JKey.Top)
+            if (JNotes.Any() && JNotes[0].Bottom > JKey.Top)
             {
-                JNote.Visible = false;
-                JNote.Location = new Point(JNote.Location.X, 0);
-                Notes.Remove(JNote);
+                JNotes[0].Visible = false;
+                ActiveNotes.Remove(JNotes[0]);
+                JNotes.Remove(JNotes[0]);
                 PossibleHits++;
                 Hits++;
                 lblScore.Text = (Convert.ToDouble(Hits) / PossibleHits * 100).ToString("N2") + "%";
@@ -188,11 +262,11 @@ public partial class FormSetup : Form
         else if (e.KeyCode == Keys.K)
         {
             KKey.BackColor = Color.FromArgb(60, 78, 93);
-            if (KNote.Bottom > KKey.Top)
+            if (KNotes.Any() && KNotes[0].Bottom > KKey.Top)
             {
-                KNote.Visible = false;
-                KNote.Location = new Point(KNote.Location.X, 0);
-                Notes.Remove(KNote);
+                KNotes[0].Visible = false;
+                ActiveNotes.Remove(KNotes[0]);
+                KNotes.Remove(KNotes[0]);
                 PossibleHits++;
                 Hits++;
                 lblScore.Text = (Convert.ToDouble(Hits) / PossibleHits * 100).ToString("N2") + "%";
