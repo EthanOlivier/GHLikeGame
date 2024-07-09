@@ -34,6 +34,10 @@ namespace GHLikeGame
         {
             this.components = new System.ComponentModel.Container();
             this.GPBackground = new System.Windows.Forms.Panel();
+            this.KNote = new System.Windows.Forms.PictureBox();
+            this.DNote = new System.Windows.Forms.PictureBox();
+            this.KKey = new System.Windows.Forms.PictureBox();
+            this.DKey = new System.Windows.Forms.PictureBox();
             this.JNote = new System.Windows.Forms.PictureBox();
             this.FNote = new System.Windows.Forms.PictureBox();
             this.JKey = new System.Windows.Forms.PictureBox();
@@ -43,6 +47,10 @@ namespace GHLikeGame
             this.tmrBetweenNotes = new System.Windows.Forms.Timer(this.components);
             this.lblScore = new System.Windows.Forms.Label();
             this.GPBackground.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.KNote)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DNote)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.KKey)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DKey)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.JNote)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.FNote)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.JKey)).BeginInit();
@@ -52,22 +60,70 @@ namespace GHLikeGame
             // 
             // GPBackground
             // 
+            this.GPBackground.Controls.Add(this.KNote);
+            this.GPBackground.Controls.Add(this.DNote);
+            this.GPBackground.Controls.Add(this.KKey);
+            this.GPBackground.Controls.Add(this.DKey);
             this.GPBackground.Controls.Add(this.JNote);
             this.GPBackground.Controls.Add(this.FNote);
             this.GPBackground.Controls.Add(this.JKey);
             this.GPBackground.Controls.Add(this.FKey);
-            this.GPBackground.Location = new System.Drawing.Point(200, 0);
+            this.GPBackground.Location = new System.Drawing.Point(150, 0);
             this.GPBackground.Name = "GPBackground";
-            this.GPBackground.Size = new System.Drawing.Size(400, 450);
+            this.GPBackground.Size = new System.Drawing.Size(500, 450);
             this.GPBackground.TabIndex = 1;
             this.GPBackground.Paint += new System.Windows.Forms.PaintEventHandler(this.GPBackground_Paint);
+            // 
+            // KNote
+            // 
+            this.KNote.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(86)))), ((int)(((byte)(112)))), ((int)(((byte)(133)))));
+            this.KNote.Location = new System.Drawing.Point(325, 0);
+            this.KNote.Name = "KNote";
+            this.KNote.Size = new System.Drawing.Size(75, 75);
+            this.KNote.TabIndex = 7;
+            this.KNote.TabStop = false;
+            this.KNote.Visible = false;
+            // 
+            // DNote
+            // 
+            this.DNote.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(61)))), ((int)(((byte)(91)))), ((int)(((byte)(116)))));
+            this.DNote.Location = new System.Drawing.Point(100, 0);
+            this.DNote.Name = "DNote";
+            this.DNote.Size = new System.Drawing.Size(75, 75);
+            this.DNote.TabIndex = 6;
+            this.DNote.TabStop = false;
+            this.DNote.Visible = false;
+            // 
+            // KKey
+            // 
+            this.KKey.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(86)))), ((int)(((byte)(112)))), ((int)(((byte)(133)))));
+            this.KKey.Image = global::GHLikeGame.Properties.Resources.K;
+            this.KKey.Location = new System.Drawing.Point(325, 375);
+            this.KKey.Name = "KKey";
+            this.KKey.Size = new System.Drawing.Size(75, 75);
+            this.KKey.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.KKey.TabIndex = 5;
+            this.KKey.TabStop = false;
+            this.KKey.Paint += new System.Windows.Forms.PaintEventHandler(this.Keys_Paint);
+            // 
+            // DKey
+            // 
+            this.DKey.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(61)))), ((int)(((byte)(91)))), ((int)(((byte)(116)))));
+            this.DKey.Image = global::GHLikeGame.Properties.Resources.D;
+            this.DKey.Location = new System.Drawing.Point(100, 375);
+            this.DKey.Name = "DKey";
+            this.DKey.Size = new System.Drawing.Size(75, 75);
+            this.DKey.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.DKey.TabIndex = 4;
+            this.DKey.TabStop = false;
+            this.DKey.Paint += new System.Windows.Forms.PaintEventHandler(this.Keys_Paint);
             // 
             // JNote
             // 
             this.JNote.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(71)))), ((int)(((byte)(98)))));
-            this.JNote.Location = new System.Drawing.Point(200, 0);
+            this.JNote.Location = new System.Drawing.Point(250, 0);
             this.JNote.Name = "JNote";
-            this.JNote.Size = new System.Drawing.Size(100, 75);
+            this.JNote.Size = new System.Drawing.Size(75, 75);
             this.JNote.TabIndex = 3;
             this.JNote.TabStop = false;
             this.JNote.Visible = false;
@@ -75,9 +131,9 @@ namespace GHLikeGame
             // FNote
             // 
             this.FNote.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(13)))), ((int)(((byte)(50)))), ((int)(((byte)(81)))));
-            this.FNote.Location = new System.Drawing.Point(100, 0);
+            this.FNote.Location = new System.Drawing.Point(175, 0);
             this.FNote.Name = "FNote";
-            this.FNote.Size = new System.Drawing.Size(100, 75);
+            this.FNote.Size = new System.Drawing.Size(75, 75);
             this.FNote.TabIndex = 2;
             this.FNote.TabStop = false;
             this.FNote.Visible = false;
@@ -86,9 +142,9 @@ namespace GHLikeGame
             // 
             this.JKey.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(71)))), ((int)(((byte)(98)))));
             this.JKey.Image = global::GHLikeGame.Properties.Resources.J;
-            this.JKey.Location = new System.Drawing.Point(200, 375);
+            this.JKey.Location = new System.Drawing.Point(250, 375);
             this.JKey.Name = "JKey";
-            this.JKey.Size = new System.Drawing.Size(100, 75);
+            this.JKey.Size = new System.Drawing.Size(75, 75);
             this.JKey.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.JKey.TabIndex = 1;
             this.JKey.TabStop = false;
@@ -98,9 +154,9 @@ namespace GHLikeGame
             // 
             this.FKey.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(13)))), ((int)(((byte)(50)))), ((int)(((byte)(81)))));
             this.FKey.Image = global::GHLikeGame.Properties.Resources.F;
-            this.FKey.Location = new System.Drawing.Point(100, 375);
+            this.FKey.Location = new System.Drawing.Point(175, 375);
             this.FKey.Name = "FKey";
-            this.FKey.Size = new System.Drawing.Size(100, 75);
+            this.FKey.Size = new System.Drawing.Size(75, 75);
             this.FKey.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.FKey.TabIndex = 0;
             this.FKey.TabStop = false;
@@ -131,11 +187,11 @@ namespace GHLikeGame
             // 
             this.lblScore.BackColor = System.Drawing.Color.Transparent;
             this.lblScore.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblScore.Location = new System.Drawing.Point(642, 195);
+            this.lblScore.Location = new System.Drawing.Point(650, 175);
             this.lblScore.Name = "lblScore";
-            this.lblScore.Size = new System.Drawing.Size(100, 91);
+            this.lblScore.Size = new System.Drawing.Size(150, 100);
             this.lblScore.TabIndex = 2;
-            this.lblScore.Text = "0";
+            this.lblScore.Text = "100.00%";
             this.lblScore.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // FormSetup
@@ -151,7 +207,12 @@ namespace GHLikeGame
             this.Text = "Main";
             this.Load += new System.EventHandler(this.FormLoad);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.KeysPressed);
+            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.KeysReleased);
             this.GPBackground.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.KNote)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DNote)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.KKey)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DKey)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.JNote)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.FNote)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.JKey)).EndInit();
@@ -163,7 +224,6 @@ namespace GHLikeGame
 
         #endregion
 
-        private WindowsMediaPlayer Song;
         private PictureBox Background;
         private Panel GPBackground;
         private PictureBox JKey;
@@ -173,6 +233,10 @@ namespace GHLikeGame
         private Timer tmrDropDown;
         private Timer tmrBetweenNotes;
         private Label lblScore;
+        private PictureBox DKey;
+        private PictureBox KKey;
+        private PictureBox KNote;
+        private PictureBox DNote;
     }
 }
 

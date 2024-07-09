@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using System.IO;
+using System.Media;
 
 namespace GHLikeGame;
 
@@ -11,6 +12,8 @@ public partial class FormSetup : Form
     List<PictureBox> Notes = new List<PictureBox>();
     string[] FileContents;
     int FileLine = 0;
+    int Hits = 0;
+    int PossibleHits = 0;
     public FormSetup()
     {
         InitializeComponent();
@@ -33,6 +36,9 @@ public partial class FormSetup : Form
         GPBackground.BackColor = Color.FromArgb(100, 13, 50, 81);
         lblScore.Parent = Background;
         lblScore.BackColor = Color.FromArgb(240, 13, 50, 81);
+
+        SoundPlayer song = new SoundPlayer(@"C:\Users\Ethan\source\repos\GHTest\GHTest\Resources\tomp3.cc - Goukisan  Betrayal of Fear.wav");
+        song.Play();
     }
 
     private void GPBackground_Paint(object sender, PaintEventArgs e)
@@ -63,7 +69,12 @@ public partial class FormSetup : Form
 
     public void StartNotesFalling(string note)
     {
-        if (note == "F")
+        if (note == "D")
+        {
+            DNote.Visible = true;
+            Notes.Add(DNote);
+        }
+        else if (note == "F")
         {
             FNote.Visible = true;
             Notes.Add(FNote);
@@ -72,6 +83,11 @@ public partial class FormSetup : Form
         {
             JNote.Visible = true;
             Notes.Add(JNote);
+        }
+        else if (note == "K")
+        {
+            KNote.Visible = true;
+            Notes.Add(KNote);
         }
     }
 
@@ -86,6 +102,8 @@ public partial class FormSetup : Form
             }
             else
             {
+                PossibleHits++;
+                lblScore.Text = (Convert.ToDouble(Hits) / PossibleHits * 100).ToString("N2") + "%";
                 note.Visible = false;
                 note.Location = new Point(note.Location.X, 0);
                 Notes.Remove(note);
@@ -94,11 +112,15 @@ public partial class FormSetup : Form
     }
     public void ReadFileContents()
     {
-        const string FILE_PATH = "C:\\Users\\Ethan\\source\\repos\\GHLikeGame\\SongNotes.txt";
+        const string FILE_PATH = "C:\\Users\\Ethan\\source\\repos\\GHLikeGame\\GHLikeGame\\Resources\\SongNotes.txt";
         FileContents = File.ReadAllLines(FILE_PATH);
     }
     private void DisplayNotes(object sender, EventArgs e)
     {
+        if (FileContents[FileLine].Contains("d"))
+        {
+            StartNotesFalling("D");
+        }
         if (FileContents[FileLine].Contains("f"))
         {
             StartNotesFalling("F");
@@ -106,6 +128,10 @@ public partial class FormSetup : Form
         if (FileContents[FileLine].Contains("j"))
         {
             StartNotesFalling("J");
+        }
+        if (FileContents[FileLine].Contains("k"))
+        {
+            StartNotesFalling("K");
         }
 
         if (FileLine < FileContents.Length - 1)
@@ -120,25 +146,77 @@ public partial class FormSetup : Form
 
     private void KeysPressed(object sender, KeyEventArgs e)
     {
-        if (e.KeyCode == Keys.F)
+        if (e.KeyCode == Keys.D)
         {
+            DKey.BackColor = Color.FromArgb(43, 64, 81);
+            if (DNote.Bottom > DKey.Top)
+            {
+                DNote.Visible = false;
+                DNote.Location = new Point(DNote.Location.X, 0);
+                Notes.Remove(DNote);
+                PossibleHits++;
+                Hits++;
+                lblScore.Text = (Convert.ToDouble(Hits) / PossibleHits * 100).ToString("N2") + "%";
+            }
+        }
+        else if (e.KeyCode == Keys.F)
+        {
+            FKey.BackColor = Color.FromArgb(26, 39, 60);
             if (FNote.Bottom > FKey.Top)
             {
                 FNote.Visible = false;
-                int score = Convert.ToInt32(lblScore.Text);
-                score++;
-                lblScore.Text = score.ToString();
+                FNote.Location = new Point(FNote.Location.X, 0);
+                Notes.Remove(FNote);
+                PossibleHits++;
+                Hits++;
+                lblScore.Text = (Convert.ToDouble(Hits) / PossibleHits * 100).ToString("N2") + "%";
             }
         }
         else if (e.KeyCode == Keys.J)
         {
+            JKey.BackColor = Color.FromArgb(30, 57, 78);
             if (JNote.Bottom > JKey.Top)
             {
                 JNote.Visible = false;
-                int score = Convert.ToInt32(lblScore.Text);
-                score++;
-                lblScore.Text = score.ToString();
+                JNote.Location = new Point(JNote.Location.X, 0);
+                Notes.Remove(JNote);
+                PossibleHits++;
+                Hits++;
+                lblScore.Text = (Convert.ToDouble(Hits) / PossibleHits * 100).ToString("N2") + "%";
             }
+        }
+        else if (e.KeyCode == Keys.K)
+        {
+            KKey.BackColor = Color.FromArgb(60, 78, 93);
+            if (KNote.Bottom > KKey.Top)
+            {
+                KNote.Visible = false;
+                KNote.Location = new Point(KNote.Location.X, 0);
+                Notes.Remove(KNote);
+                PossibleHits++;
+                Hits++;
+                lblScore.Text = (Convert.ToDouble(Hits) / PossibleHits * 100).ToString("N2") + "%";
+            }
+        }
+    }
+
+    private void KeysReleased(object sender, KeyEventArgs e)
+    {
+        if (e.KeyCode == Keys.D)
+        {
+            DKey.BackColor = Color.FromArgb(61, 91, 116);
+        }
+        else if (e.KeyCode == Keys.F)
+        {
+            FKey.BackColor = Color.FromArgb(13, 50, 81);
+        }
+        else if (e.KeyCode == Keys.J)
+        {
+            JKey.BackColor = Color.FromArgb(37, 71, 98);
+        }
+        else if (e.KeyCode == Keys.K)
+        {
+            KKey.BackColor = Color.FromArgb(86, 112, 133);
         }
     }
 }
