@@ -20,6 +20,7 @@ public partial class FormSetup : Form
     int Hits = 0;
     int PossibleHits = 0;
     int NoteSpeed = 0;
+    bool EOF = false;
     public FormSetup()
     {
         InitializeComponent();
@@ -191,36 +192,39 @@ public partial class FormSetup : Form
     }
     private void ReadFileLine(object sender, EventArgs e)
     {
-        if (FileContents[FileLine].Contains("("))
+        if (!EOF)
         {
-            int startIndex = FileContents[FileLine].IndexOf("(");
-            int endIndex = FileContents[FileLine].IndexOf(")", startIndex);
-            int interval = Convert.ToInt32(FileContents[FileLine].Substring(startIndex + 1, endIndex - startIndex - 1));
-            tmrBetweenNotes.Stop();
-            tmrBetweenNotes.Interval = interval;
-            tmrBetweenNotes.Start();
-        }
-        if (FileContents[FileLine].Contains("/"))
-        {
-            int startIndex = FileContents[FileLine].IndexOf("/");
-            int endIndex = FileContents[FileLine].IndexOf(@"\", startIndex);
-            NoteSpeed = Convert.ToInt32(FileContents[FileLine].Substring(startIndex + 1, endIndex - startIndex - 1));
-        }
-        if (FileContents[FileLine].Contains("d"))
-        {
-            StartNotesFalling("D");
-        }
-        if (FileContents[FileLine].Contains("f"))
-        {
-            StartNotesFalling("F");
-        }
-        if (FileContents[FileLine].Contains("j"))
-        {
-            StartNotesFalling("J");
-        }
-        if (FileContents[FileLine].Contains("k"))
-        {
-            StartNotesFalling("K");
+            if (FileContents[FileLine].Contains("("))
+            {
+                int startIndex = FileContents[FileLine].IndexOf("(");
+                int endIndex = FileContents[FileLine].IndexOf(")", startIndex);
+                int interval = Convert.ToInt32(FileContents[FileLine].Substring(startIndex + 1, endIndex - startIndex - 1));
+                tmrBetweenNotes.Stop();
+                tmrBetweenNotes.Interval = interval;
+                tmrBetweenNotes.Start();
+            }
+            if (FileContents[FileLine].Contains("/"))
+            {
+                int startIndex = FileContents[FileLine].IndexOf("/");
+                int endIndex = FileContents[FileLine].IndexOf(@"\", startIndex);
+                NoteSpeed = Convert.ToInt32(FileContents[FileLine].Substring(startIndex + 1, endIndex - startIndex - 1));
+            }
+            if (FileContents[FileLine].Contains("d"))
+            {
+                StartNotesFalling("D");
+            }
+            if (FileContents[FileLine].Contains("f"))
+            {
+                StartNotesFalling("F");
+            }
+            if (FileContents[FileLine].Contains("j"))
+            {
+                StartNotesFalling("J");
+            }
+            if (FileContents[FileLine].Contains("k"))
+            {
+                StartNotesFalling("K");
+            }
         }
 
         if (FileLine < FileContents.Length - 1)
@@ -229,64 +233,76 @@ public partial class FormSetup : Form
         }
         else
         {
-            tmrBetweenNotes.Stop();
+            EOF = true;
+            if (!ActiveNotes.Any())
+            {
+                tmrBetweenNotes.Stop();
+                tmrDropDown.Stop();
+                GPBackground.Visible = false;
+                lblPercent.BackColor = Color.FromArgb(100, 13, 50, 81);
+                lblPercent.Dock = DockStyle.Fill;
+                lblPercent.Text += "\n" + lblScore.Text;
+            }
         }
     }
 
     private void KeysPressed(object sender, KeyEventArgs e)
     {
-        if (e.KeyCode == Keys.D)
+        if (!EOF)
         {
-            DKey.BackColor = Color.FromArgb(43, 64, 81);
-            if (DNotes.Any() && DNotes[0].Bottom > DKey.Top)
+            if (e.KeyCode == Keys.D)
             {
-                DNotes[0].Visible = false;
-                ActiveNotes.Remove(DNotes[0]);
-                DNotes.Remove(DNotes[0]);
+                DKey.BackColor = Color.FromArgb(43, 64, 81);
+                if (DNotes.Any() && DNotes[0].Bottom > DKey.Top)
+                {
+                    DNotes[0].Visible = false;
+                    ActiveNotes.Remove(DNotes[0]);
+                    DNotes.Remove(DNotes[0]);
+                    Hits++;
+                }
                 PossibleHits++;
-                Hits++;
                 lblPercent.Text = (Convert.ToDouble(Hits) / PossibleHits * 100).ToString("N2") + "%";
                 lblScore.Text = Hits.ToString() + " / " + PossibleHits.ToString();
             }
-        }
-        else if (e.KeyCode == Keys.F)
-        {
-            FKey.BackColor = Color.FromArgb(26, 39, 60);
-            if (FNotes.Any() && FNotes[0].Bottom > FKey.Top)
+            else if (e.KeyCode == Keys.F)
             {
-                FNotes[0].Visible = false;
-                ActiveNotes.Remove(FNotes[0]);
-                FNotes.Remove(FNotes[0]);
+                FKey.BackColor = Color.FromArgb(26, 39, 60);
+                if (FNotes.Any() && FNotes[0].Bottom > FKey.Top)
+                {
+                    FNotes[0].Visible = false;
+                    ActiveNotes.Remove(FNotes[0]);
+                    FNotes.Remove(FNotes[0]);
+                    Hits++;
+                }
                 PossibleHits++;
-                Hits++;
                 lblPercent.Text = (Convert.ToDouble(Hits) / PossibleHits * 100).ToString("N2") + "%";
                 lblScore.Text = Hits.ToString() + " / " + PossibleHits.ToString();
             }
-        }
-        else if (e.KeyCode == Keys.J)
-        {
-            JKey.BackColor = Color.FromArgb(30, 57, 78);
-            if (JNotes.Any() && JNotes[0].Bottom > JKey.Top)
+            else if (e.KeyCode == Keys.J)
             {
-                JNotes[0].Visible = false;
-                ActiveNotes.Remove(JNotes[0]);
-                JNotes.Remove(JNotes[0]);
+                JKey.BackColor = Color.FromArgb(30, 57, 78);
+                if (JNotes.Any() && JNotes[0].Bottom > JKey.Top)
+                {
+                    JNotes[0].Visible = false;
+                    ActiveNotes.Remove(JNotes[0]);
+                    JNotes.Remove(JNotes[0]);
+                    Hits++;
+                }
                 PossibleHits++;
-                Hits++;
                 lblPercent.Text = (Convert.ToDouble(Hits) / PossibleHits * 100).ToString("N2") + "%";
                 lblScore.Text = Hits.ToString() + " / " + PossibleHits.ToString();
             }
-        }
-        else if (e.KeyCode == Keys.K)
-        {
-            KKey.BackColor = Color.FromArgb(60, 78, 93);
-            if (KNotes.Any() && KNotes[0].Bottom > KKey.Top)
+            else if (e.KeyCode == Keys.K)
             {
-                KNotes[0].Visible = false;
-                ActiveNotes.Remove(KNotes[0]);
-                KNotes.Remove(KNotes[0]);
+                KKey.BackColor = Color.FromArgb(60, 78, 93);
+                if (KNotes.Any() && KNotes[0].Bottom > KKey.Top)
+                {
+                    KNotes[0].Visible = false;
+                    ActiveNotes.Remove(KNotes[0]);
+                    KNotes.Remove(KNotes[0]);
+                    Hits++;
+                }
                 PossibleHits++;
-                Hits++;
                 lblPercent.Text = (Convert.ToDouble(Hits) / PossibleHits * 100).ToString("N2") + "%";
                 lblScore.Text = Hits.ToString() + " / " + PossibleHits.ToString();
             }
