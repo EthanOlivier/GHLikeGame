@@ -130,7 +130,7 @@ namespace GHLikeGame
             // tmrBetweenNotes
             // 
             this.tmrBetweenNotes.Interval = 500;
-            this.tmrBetweenNotes.Tick += new System.EventHandler(this.DisplayNotes);
+            this.tmrBetweenNotes.Tick += new System.EventHandler(this.ReadFileLine);
             // 
             // lblPercent
             // 

@@ -19,6 +19,7 @@ public partial class FormSetup : Form
     int FileLine = 0;
     int Hits = 0;
     int PossibleHits = 0;
+    int NoteSpeed = 0;
     public FormSetup()
     {
         InitializeComponent();
@@ -153,7 +154,7 @@ public partial class FormSetup : Form
             var note = ActiveNotes[i];
             if (note.Bottom < this.ClientSize.Height + note.Size.Height)
             {
-                note.Location = new Point(note.Location.X, note.Location.Y + 8);
+                note.Location = new Point(note.Location.X, note.Location.Y + NoteSpeed);
             }
             else
             {
@@ -188,8 +189,23 @@ public partial class FormSetup : Form
         const string FILE_PATH = "C:\\Users\\Ethan\\source\\repos\\GHLikeGame\\GHLikeGame\\Resources\\SongNotes.txt";
         FileContents = File.ReadAllLines(FILE_PATH);
     }
-    private void DisplayNotes(object sender, EventArgs e)
+    private void ReadFileLine(object sender, EventArgs e)
     {
+        if (FileContents[FileLine].Contains("("))
+        {
+            int startIndex = FileContents[FileLine].IndexOf("(");
+            int endIndex = FileContents[FileLine].IndexOf(")", startIndex);
+            int interval = Convert.ToInt32(FileContents[FileLine].Substring(startIndex + 1, endIndex - startIndex - 1));
+            tmrBetweenNotes.Stop();
+            tmrBetweenNotes.Interval = interval;
+            tmrBetweenNotes.Start();
+        }
+        if (FileContents[FileLine].Contains("/"))
+        {
+            int startIndex = FileContents[FileLine].IndexOf("/");
+            int endIndex = FileContents[FileLine].IndexOf(@"\", startIndex);
+            NoteSpeed = Convert.ToInt32(FileContents[FileLine].Substring(startIndex + 1, endIndex - startIndex - 1));
+        }
         if (FileContents[FileLine].Contains("d"))
         {
             StartNotesFalling("D");
