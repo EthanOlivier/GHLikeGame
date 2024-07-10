@@ -163,6 +163,7 @@ namespace GHLikeGame
             this.Controls.Add(this.lblPercent);
             this.Controls.Add(this.GPBackground);
             this.Controls.Add(this.Background);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.MaximizeBox = false;
             this.Name = "FormSetup";
             this.Text = "Main";

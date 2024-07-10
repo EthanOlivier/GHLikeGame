@@ -248,7 +248,7 @@ public partial class FormSetup : Form
 
     private void KeysPressed(object sender, KeyEventArgs e)
     {
-        if (!EOF)
+        if (tmrDropDown.Enabled)
         {
             if (e.KeyCode == Keys.D)
             {
