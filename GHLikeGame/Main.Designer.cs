@@ -167,7 +167,7 @@ namespace GHLikeGame
             this.MaximizeBox = false;
             this.Name = "FormSetup";
             this.Text = "Main";
-            this.Load += new System.EventHandler(this.FormLoad);
+            this.KeyPreview = true;
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.KeysPressed);
             this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.KeysReleased);
             this.GPBackground.ResumeLayout(false);
