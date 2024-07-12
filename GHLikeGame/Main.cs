@@ -11,17 +11,24 @@ namespace GHLikeGame;
 public partial class FormSetup : Form
 {
     Dictionary<Keys, (List<PictureBox>, PictureBox)> ActionKeys;
+
+    List<PictureBox> ActiveNotes = new List<PictureBox>();
     List<PictureBox> DNotes = new List<PictureBox>();
     List<PictureBox> FNotes = new List<PictureBox>();
     List<PictureBox> JNotes = new List<PictureBox>();
     List<PictureBox> KNotes = new List<PictureBox>();
-    List<PictureBox> ActiveNotes = new List<PictureBox>();
+
     string[] FileContents;
     int FileLine = 0;
     int Hits = 0;
     int PossibleHits = 0;
     int NoteSpeed = 0;
     bool keyDown = false;
+
+    // KeysDown includes all of the keys
+    // that are actively being held down
+    // in order to prevent OnKeyDown events happening
+    // multiple times while the key is being held
     HashSet<Keys> KeysDown = new HashSet<Keys>();
 
 
@@ -38,6 +45,7 @@ public partial class FormSetup : Form
         tmrDropDown.Start();
 
         ReadFileContents();
+
         tmrBetweenNotes.Start();
 
         GPBackground.Parent = Background;
@@ -136,19 +144,17 @@ public partial class FormSetup : Form
             {
                 StartNotesFalling("K");
             }
+
             FileLine++;
         }
-        else
+        else if (!ActiveNotes.Any())
         {
-            if (!ActiveNotes.Any())
-            {
-                tmrBetweenNotes.Stop();
-                tmrDropDown.Stop();
-                GPBackground.Visible = false;
-                lblPercent.BackColor = Color.FromArgb(100, 13, 50, 81);
-                lblPercent.Dock = DockStyle.Fill;
-                lblPercent.Text += "\n" + lblScore.Text;
-            }
+            tmrBetweenNotes.Stop();
+            tmrDropDown.Stop();
+            GPBackground.Visible = false;
+            lblPercent.BackColor = Color.FromArgb(100, 13, 50, 81);
+            lblPercent.Dock = DockStyle.Fill;
+            lblPercent.Text = lblPercent.Text + "\n" + lblScore.Text;
         }
     }
 
@@ -157,9 +163,11 @@ public partial class FormSetup : Form
     public void StartNotesFalling(string note)
     {
         PictureBox newNote = new PictureBox();
+
         newNote.Size = new Size(65, 65);
         newNote.TabStop = false;
         newNote.Visible = true;
+
         if (note == "D")
         {
             newNote.BackColor = Color.FromArgb(61, 91, 116);
@@ -188,6 +196,7 @@ public partial class FormSetup : Form
 
             KNotes.Add(newNote);
         }
+
         ActiveNotes.Add(newNote);
 
         this.Controls.Add(newNote);
