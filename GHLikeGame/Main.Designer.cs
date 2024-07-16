@@ -4,7 +4,7 @@ using System.Drawing;
 
 namespace GHLikeGame
 {
-    partial class FormSetup
+    partial class Main
     {
         /// <summary>
         /// Required designer variable.
@@ -39,10 +39,10 @@ namespace GHLikeGame
             this.JKey = new System.Windows.Forms.PictureBox();
             this.FKey = new System.Windows.Forms.PictureBox();
             this.Background = new System.Windows.Forms.PictureBox();
-            this.tmrDropDown = new System.Windows.Forms.Timer(this.components);
-            this.tmrBetweenNotes = new System.Windows.Forms.Timer(this.components);
             this.lblPercent = new System.Windows.Forms.Label();
             this.lblScore = new System.Windows.Forms.Label();
+            this.tmrDropNotes = new System.Windows.Forms.Timer(this.components);
+            this.tmrBetweenNotes = new System.Windows.Forms.Timer(this.components);
             this.GPBackground.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.KKey)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DKey)).BeginInit();
@@ -122,16 +122,6 @@ namespace GHLikeGame
             this.Background.TabIndex = 0;
             this.Background.TabStop = false;
             // 
-            // tmrDropDown
-            // 
-            this.tmrDropDown.Interval = 10;
-            this.tmrDropDown.Tick += new System.EventHandler(this.NotesDropper);
-            // 
-            // tmrBetweenNotes
-            // 
-            this.tmrBetweenNotes.Interval = 500;
-            this.tmrBetweenNotes.Tick += new System.EventHandler(this.ReadFileLine);
-            // 
             // lblPercent
             // 
             this.lblPercent.BackColor = System.Drawing.Color.Transparent;
@@ -154,7 +144,17 @@ namespace GHLikeGame
             this.lblScore.Text = "0 / 0";
             this.lblScore.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // FormSetup
+            // tmrDropNotes
+            // 
+            this.tmrDropNotes.Interval = 10;
+            this.tmrDropNotes.Tick += new System.EventHandler(this.NotesDropper);
+            // 
+            // tmrBetweenNotes
+            // 
+            this.tmrBetweenNotes.Interval = 500;
+            this.tmrBetweenNotes.Tick += new System.EventHandler(this.FileReader);
+            // 
+            // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -164,12 +164,13 @@ namespace GHLikeGame
             this.Controls.Add(this.GPBackground);
             this.Controls.Add(this.Background);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.MaximizeBox = false;
-            this.Name = "FormSetup";
-            this.Text = "Main";
             this.KeyPreview = true;
-            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.KeysPressed);
-            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.KeysReleased);
+            this.MaximizeBox = false;
+            this.Name = "Main";
+            this.Text = "Main";
+            this.Load += new System.EventHandler(this.Form_Load);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.KeysDown);
+            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.KeysUp);
             this.GPBackground.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.KKey)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.DKey)).EndInit();
@@ -186,7 +187,7 @@ namespace GHLikeGame
         private Panel GPBackground;
         private PictureBox JKey;
         private PictureBox FKey;
-        private Timer tmrDropDown;
+        private Timer tmrDropNotes;
         private Timer tmrBetweenNotes;
         private Label lblPercent;
         private PictureBox DKey;

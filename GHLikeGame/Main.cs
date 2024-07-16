@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-using System.IO;
 using System.Media;
 using System.Linq;
+using System.IO;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Menu;
 
 namespace GHLikeGame;
 
-public partial class FormSetup : Form
+public partial class Main : Form
 {
     Dictionary<Keys, (List<PictureBox>, PictureBox)> ActionKeys;
 
@@ -18,35 +19,33 @@ public partial class FormSetup : Form
     List<PictureBox> JNotes = new List<PictureBox>();
     List<PictureBox> KNotes = new List<PictureBox>();
 
-    string[] FileContents;
-    int FileLine = 0;
     int Hits = 0;
     int PossibleHits = 0;
     int NoteSpeed = 0;
-    bool keyDown = false;
 
-    // KeysDown includes all of the keys
+    const string FILE_PATH = "C:\\Users\\Ethan\\source\\repos\\GHLikeGame\\GHLikeGame\\Resources\\SongNotes.txt";
+    IFileReading _fileReading = new FileReading();
+    StreamReader reader = new StreamReader(FILE_PATH);
+
+    // KeysHeld includes all of the keys
     // that are actively being held down
     // in order to prevent OnKeyDown events happening
     // multiple times while the key is being held
-    HashSet<Keys> KeysDown = new HashSet<Keys>();
+    HashSet<Keys> KeysBeingHeld = new HashSet<Keys>();
 
 
-    public FormSetup()
+    public Main()
     {
         InitializeComponent();
+    }
 
+    private void Form_Load(object sender, EventArgs e)
+    {
         // Used to only set the size of the border around the Gameplay Background once
         typeof(Panel).InvokeMember("DoubleBuffered",
             System.Reflection.BindingFlags.SetProperty | System.Reflection.BindingFlags.Instance |
             System.Reflection.BindingFlags.NonPublic,
             null, GPBackground, new object[] { true });
-
-        tmrDropDown.Start();
-
-        ReadFileContents();
-
-        tmrBetweenNotes.Start();
 
         GPBackground.Parent = Background;
         GPBackground.BackColor = Color.FromArgb(100, 13, 50, 81);
@@ -65,8 +64,47 @@ public partial class FormSetup : Form
             { Keys.J, (JNotes, JKey) },
             { Keys.K, (KNotes, KKey) },
         };
+
+        tmrBetweenNotes.Start();
+        tmrDropNotes.Start();
     }
 
+    private void FileReader(object sender, EventArgs e)
+    {
+        int interval = 0;
+        int noteSpeed = 0;
+        List<Keys> notes = new List<Keys>();
+
+        if (!reader.EndOfStream || ActiveNotes.Any())
+        {
+            if (!reader.EndOfStream)
+            {
+                (interval, noteSpeed, notes) = _fileReading.ReadFileContents(reader);
+
+                if (interval != 0)
+                {
+                    tmrBetweenNotes.Interval = interval;
+                }
+                if (noteSpeed != 0)
+                {
+                    NoteSpeed = noteSpeed;
+                }
+                foreach (var note in notes)
+                {
+                    CreateNotes(note);
+                }
+            }
+        }
+        else
+        {
+            tmrBetweenNotes.Stop();
+            tmrDropNotes.Stop();
+            GPBackground.Visible = false;
+            lblPercent.BackColor = Color.FromArgb(100, 13, 50, 81);
+            lblPercent.Dock = DockStyle.Fill;
+            lblPercent.Text = lblPercent.Text + "\n" + lblScore.Text;
+        }
+    }
 
 
     private void GPBackground_Paint(object sender, PaintEventArgs e)
@@ -78,11 +116,10 @@ public partial class FormSetup : Form
             ControlPaint.DrawBorder(e.Graphics, rect, Color.Gray, 25, ButtonBorderStyle.Solid, // Left border
                                                       Color.Gray, 0, ButtonBorderStyle.None,   // Top border
                                                       Color.Gray, 25, ButtonBorderStyle.Solid, // Right border
-                                                      Color.Gray, 0, ButtonBorderStyle.None);  // Bottom border
+                                                      Color.Gray, 0, ButtonBorderStyle.None    // Bottom border
+            );
         }
     }
-
-
 
     private void Keys_Paint(object sender, PaintEventArgs e)
     {
@@ -99,68 +136,9 @@ public partial class FormSetup : Form
 
 
 
+    
 
-
-    public void ReadFileContents()
-    {
-        const string FILE_PATH = "C:\\Users\\Ethan\\source\\repos\\GHLikeGame\\GHLikeGame\\Resources\\SongNotes.txt";
-        FileContents = File.ReadAllLines(FILE_PATH);
-    }
-
-
-
-    private void ReadFileLine(object sender, EventArgs e)
-    {
-        if (FileLine < FileContents.Length)
-        {
-            if (FileContents[FileLine].Contains("("))
-            {
-                int startIndex = FileContents[FileLine].IndexOf("(");
-                int endIndex = FileContents[FileLine].IndexOf(")", startIndex);
-                int interval = Convert.ToInt32(FileContents[FileLine].Substring(startIndex + 1, endIndex - startIndex - 1));
-                tmrBetweenNotes.Stop();
-                tmrBetweenNotes.Interval = interval;
-                tmrBetweenNotes.Start();
-            }
-            if (FileContents[FileLine].Contains("/"))
-            {
-                int startIndex = FileContents[FileLine].IndexOf("/");
-                int endIndex = FileContents[FileLine].IndexOf(@"\", startIndex);
-                NoteSpeed = Convert.ToInt32(FileContents[FileLine].Substring(startIndex + 1, endIndex - startIndex - 1));
-            }
-            if (FileContents[FileLine].ToUpper().Contains("D"))
-            {
-                StartNotesFalling("D");
-            }
-            if (FileContents[FileLine].ToUpper().Contains("F"))
-            {
-                StartNotesFalling("F");
-            }
-            if (FileContents[FileLine].ToUpper().Contains("J"))
-            {
-                StartNotesFalling("J");
-            }
-            if (FileContents[FileLine].ToUpper().Contains("K"))
-            {
-                StartNotesFalling("K");
-            }
-
-            FileLine++;
-        }
-        else if (!ActiveNotes.Any())
-        {
-            tmrBetweenNotes.Stop();
-            tmrDropDown.Stop();
-            GPBackground.Visible = false;
-            lblPercent.BackColor = Color.FromArgb(100, 13, 50, 81);
-            lblPercent.Dock = DockStyle.Fill;
-            lblPercent.Text = lblPercent.Text + "\n" + lblScore.Text;
-        }
-    }
-
-
-
-    public void StartNotesFalling(string note)
+    private void CreateNotes(Keys note)
     {
         PictureBox newNote = new PictureBox();
 
@@ -168,28 +146,28 @@ public partial class FormSetup : Form
         newNote.TabStop = false;
         newNote.Visible = true;
 
-        if (note == "D")
+        if (note == Keys.D)
         {
             newNote.BackColor = Color.FromArgb(61, 91, 116);
             newNote.Location = new Point(255, 0);
 
             DNotes.Add(newNote);
         }
-        else if (note == "F")
+        else if (note == Keys.F)
         {
             newNote.BackColor = Color.FromArgb(13, 50, 81);
             newNote.Location = new Point(330, 0);
 
             FNotes.Add(newNote);
         }
-        else if (note == "J")
+        else if (note == Keys.J)
         {
             newNote.BackColor = Color.FromArgb(37, 71, 98);
             newNote.Location = new Point(405, 0);
             
             JNotes.Add(newNote);
         }
-        else if (note == "K")
+        else if (note == Keys.K)
         {
             newNote.BackColor = Color.FromArgb(86, 112, 133);
             newNote.Location = new Point(480, 0);
@@ -218,7 +196,6 @@ public partial class FormSetup : Form
                 lblPercent.Text = (Convert.ToDouble(Hits) / PossibleHits * 100).ToString("N2") + "%";
                 lblScore.Text = Hits.ToString() + " / " + PossibleHits.ToString();
                 note.Visible = false;
-                note.Location = new Point(note.Location.X, 0);
                 ActiveNotes.Remove(note);
 
                 if (DNotes.Contains(note))
@@ -242,19 +219,23 @@ public partial class FormSetup : Form
     }
     
 
-    private void KeysPressed(object sender, KeyEventArgs e)
+
+
+
+    private void KeysDown(object sender, KeyEventArgs e)
     {
-        if (tmrDropDown.Enabled && !KeysDown.Contains(e.KeyCode))
+        if (ActionKeys.ContainsKey(e.KeyCode))
         {
-            KeysDown.Add(e.KeyCode);
-            if (ActionKeys.ContainsKey(e.KeyCode))
+            if (tmrDropNotes.Enabled && !KeysBeingHeld.Contains(e.KeyCode))
             {
+                KeysBeingHeld.Add(e.KeyCode);
+
                 var notes = ActionKeys[e.KeyCode].Item1;
                 var key = ActionKeys[e.KeyCode].Item2;
 
                 key.BackColor = Color.FromArgb(
-                    Convert.ToInt32(key.BackColor.R - (key.BackColor.R * 0.3)), 
-                    Convert.ToInt32(key.BackColor.G - (key.BackColor.G * 0.3)), 
+                    Convert.ToInt32(key.BackColor.R - (key.BackColor.R * 0.3)),
+                    Convert.ToInt32(key.BackColor.G - (key.BackColor.G * 0.3)),
                     Convert.ToInt32(key.BackColor.B - (key.BackColor.B * 0.3))
                 );
 
@@ -272,11 +253,11 @@ public partial class FormSetup : Form
         }
     }
 
-    private void KeysReleased(object sender, KeyEventArgs e)
+    private void KeysUp(object sender, KeyEventArgs e)
     {
         if (ActionKeys.ContainsKey(e.KeyCode))
         {
-            KeysDown.Remove(e.KeyCode);
+            KeysBeingHeld.Remove(e.KeyCode);
             var key = ActionKeys[e.KeyCode].Item2;
             key.BackColor = Color.FromArgb(
                     Convert.ToInt32(key.BackColor.R / 0.7),

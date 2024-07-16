@@ -13,13 +13,7 @@ namespace GHLikeGame
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-
-            //IFileRead _fileRead = new FileRead();
-            //string[] fileContents = _fileRead.ReadFileContents();
-            //INotesDisplay _notesDisplay = new NotesDisplay(fileContents);
-            //_notesDisplay.StartDisplayingNotes();
-
-            Application.Run(new FormSetup());
+            Application.Run(new Main());
         }
     }
 }
