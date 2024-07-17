@@ -152,7 +152,7 @@ namespace GHLikeGame
             // tmrBetweenNotes
             // 
             this.tmrBetweenNotes.Interval = 500;
-            this.tmrBetweenNotes.Tick += new System.EventHandler(this.FileReader);
+            this.tmrBetweenNotes.Tick += new System.EventHandler(this.HandleFileCommands);
             // 
             // Main
             // 
