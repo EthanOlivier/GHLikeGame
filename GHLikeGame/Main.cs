@@ -10,25 +10,9 @@ namespace GHLikeGame;
 
 public partial class Main : Form
 {
-    private Dictionary<Keys, (PictureBox, Color, Point)> ActionKeys;
-
-    private Dictionary<Keys, List<PictureBox>> ActiveNotes = new Dictionary<Keys, List<PictureBox>>()
-    {
-        { Keys.D, new List<PictureBox>() },
-        { Keys.F, new List<PictureBox>() },
-        { Keys.J, new List<PictureBox>() },
-        { Keys.K, new List<PictureBox>() }
-    };
-
-    private int Hits;
-    private int PossibleHits;
-    private int NoteSpeed;
-
-    // KeysHeld includes all of the keys
-    // that are actively being held down
-    // in order to prevent OnKeyDown events happening
-    // multiple times while the key is being held
-    private HashSet<Keys> KeysBeingHeld = new HashSet<Keys>();
+    private Dictionary<Keys, (PictureBox, Color, Point)> ActionKeys; // Should be removed after the file is allowed
+                                                                     // to be able to determine the amount
+                                                                     // and which keys it wants whenever it wants
 
     private IFileReading _fileReading;
     private StreamReader reader;
@@ -36,11 +20,28 @@ public partial class Main : Form
 
     public Main(IFileReading fileReading, StreamReader reader, SoundPlayer song)
     {
-        this._fileReading = fileReading;
+        _fileReading = fileReading;
         this.reader = reader;
         this.song = song;
 
         InitializeComponent();
+
+
+        Dictionary<Keys, List<PictureBox>> activeNotes = new Dictionary<Keys, List<PictureBox>>()
+        {
+            { Keys.D, new List<PictureBox>() },
+            { Keys.F, new List<PictureBox>() },
+            { Keys.J, new List<PictureBox>() },
+            { Keys.K, new List<PictureBox>() }
+        };
+        // This is done to prevent OnKeyDown events happening
+        // multiple times while the key is being held
+        var keysBeingHeld = new HashSet<Keys>();
+
+        this.tmrDropNotes.Tick += (sender, e) => NotesDropper(sender, e, activeNotes);
+        this.tmrBetweenNotes.Tick += (sender, e) => HandleFileCommands(sender, e, activeNotes);
+        this.KeyDown += (sender, e) => KeysDown(sender, e, keysBeingHeld, activeNotes);
+        this.KeyUp += (sender, e) => KeysUp(sender, e, keysBeingHeld);
     }
 
     private void Form_Load(object sender, EventArgs e)
@@ -101,12 +102,11 @@ public partial class Main : Form
 
 
 
-    private void HandleFileCommands(object sender, EventArgs e)
+    private void HandleFileCommands(object sender, EventArgs e, Dictionary<Keys, List<PictureBox>> activeNotes)
     {
         if (!reader.EndOfStream)
         {
-            int interval = 0;
-            int noteSpeed = 0;
+            int interval, noteSpeed;
             List<Keys> notes = new List<Keys>();
 
             (interval, noteSpeed, notes) = _fileReading.ReadFileContents(reader);
@@ -115,18 +115,15 @@ public partial class Main : Form
             {
                 tmrBetweenNotes.Interval = interval;
             }
-            if (noteSpeed != 0)
-            {
-                NoteSpeed = noteSpeed;
-            }
+
             foreach (var note in notes)
             {
-                CreateNote(ActiveNotes[note], ActionKeys[note].Item2, ActionKeys[note].Item3);
+                CreateNote(activeNotes[note], ActionKeys[note].Item2, ActionKeys[note].Item3, noteSpeed);
             }
         }
         else
         {
-            foreach (var key in ActiveNotes)
+            foreach (var key in activeNotes)
             {
                 if (key.Value.Count > 0)
                 {
@@ -143,7 +140,7 @@ public partial class Main : Form
         }
     }
 
-    private void CreateNote(List<PictureBox> notesGroup, Color bgColor, Point location)
+    private void CreateNote(List<PictureBox> notesGroup, Color bgColor, Point location, int noteSpeed)
     {
         PictureBox newNote = new PictureBox();
 
@@ -152,6 +149,7 @@ public partial class Main : Form
         newNote.Visible = true;
         newNote.BackColor = bgColor;
         newNote.Location = location;
+        newNote.Tag = noteSpeed;
 
         notesGroup.Add(newNote);
 
@@ -159,27 +157,25 @@ public partial class Main : Form
         newNote.BringToFront();
     }
 
-    private void NotesDropper(object sender, EventArgs e)
+    private void NotesDropper(object sender, EventArgs e, Dictionary<Keys, List<PictureBox>> activeNotes)
     {
-        List<Keys> keys = new List<Keys>(ActiveNotes.Keys);
-        for (int i = 0; i < ActiveNotes.Keys.Count; i++)
+        List<Keys> keys = new List<Keys>(activeNotes.Keys);
+        for (int i = 0; i < activeNotes.Keys.Count; i++)
         {
             Keys key = keys[i];
-            List<PictureBox> notes = ActiveNotes[key];
+            List<PictureBox> notes = activeNotes[key];
             for (int j = 0; j < notes.Count; j++)
             {
                 var note = notes[j];
                 if (note.Bottom < this.ClientSize.Height + note.Size.Height)
                 {
-                    note.Location = new Point(note.Location.X, note.Location.Y + NoteSpeed);
+                    note.Location = new Point(note.Location.X, note.Location.Y + Convert.ToInt32(note.Tag));
                 }
                 else
                 {
-                    PossibleHits++;
-                    lblPercent.Text = (Convert.ToDouble(Hits) / PossibleHits * 100).ToString("N2") + "%";
-                    lblScore.Text = Hits.ToString() + " / " + PossibleHits.ToString();
+                    CalculateScore(0, 1);
                     note.Visible = false;
-                    ActiveNotes[key].Remove(note);
+                    activeNotes[key].Remove(note);
                 }
             }
         }
@@ -187,17 +183,32 @@ public partial class Main : Form
     
 
 
+    private void CalculateScore(int amountAddedToHits, int amountAddedToPossibleHits)
+    {
+        string scoreText = lblScore.Text;
+        int dividerLocation = scoreText.IndexOf("/");
+
+        int hits = Convert.ToInt32(scoreText.Substring(0, dividerLocation - 1));
+        int possibleHits = Convert.ToInt32(lblScore.Text.Substring(dividerLocation + 1));
+
+        hits += amountAddedToHits;
+        possibleHits += amountAddedToPossibleHits;
+
+        lblPercent.Text = (Convert.ToDouble(hits) / possibleHits * 100).ToString("N2") + "%";
+        lblScore.Text = hits.ToString() + " / " + possibleHits.ToString();
+    }
 
 
-    private void KeysDown(object sender, KeyEventArgs e)
+
+    private void KeysDown(object sender, KeyEventArgs e, HashSet<Keys> keysBeingHeld, Dictionary<Keys, List<PictureBox>> activeNotes)
     {
         if (ActionKeys.ContainsKey(e.KeyCode))
         {
-            if (tmrDropNotes.Enabled && !KeysBeingHeld.Contains(e.KeyCode))
+            if (tmrDropNotes.Enabled && !keysBeingHeld.Contains(e.KeyCode))
             {
-                KeysBeingHeld.Add(e.KeyCode);
+                keysBeingHeld.Add(e.KeyCode);
 
-                var notes = ActiveNotes[e.KeyCode];
+                var notes = activeNotes[e.KeyCode];
                 var key = ActionKeys[e.KeyCode].Item1;
 
                 key.BackColor = Color.FromArgb(
@@ -209,22 +220,22 @@ public partial class Main : Form
                 if (notes.Any() && notes[0].Bottom > key.Top)
                 {
                     notes[0].Visible = false;
-                    ActiveNotes[e.KeyCode].Remove(notes[0]);
-                    Hits++;
+                    activeNotes[e.KeyCode].Remove(notes[0]);
+                    CalculateScore(1, 1);
                 }
-
-                PossibleHits++;
-                lblPercent.Text = (Convert.ToDouble(Hits) / PossibleHits * 100).ToString("N2") + "%";
-                lblScore.Text = Hits.ToString() + " / " + PossibleHits.ToString();
+                else
+                {
+                    CalculateScore(0, 1);
+                }
             }
         }
     }
 
-    private void KeysUp(object sender, KeyEventArgs e)
+    private void KeysUp(object sender, KeyEventArgs e, HashSet<Keys> keysBeingHeld)
     {
         if (ActionKeys.ContainsKey(e.KeyCode))
         {
-            KeysBeingHeld.Remove(e.KeyCode);
+            keysBeingHeld.Remove(e.KeyCode);
             var key = ActionKeys[e.KeyCode].Item1;
             key.BackColor = Color.FromArgb(
                     Convert.ToInt32(key.BackColor.R / 0.7),

@@ -147,12 +147,10 @@ namespace GHLikeGame
             // tmrDropNotes
             // 
             this.tmrDropNotes.Interval = 10;
-            this.tmrDropNotes.Tick += new System.EventHandler(this.NotesDropper);
             // 
             // tmrBetweenNotes
             // 
             this.tmrBetweenNotes.Interval = 500;
-            this.tmrBetweenNotes.Tick += new System.EventHandler(this.HandleFileCommands);
             // 
             // Main
             // 
@@ -169,8 +167,6 @@ namespace GHLikeGame
             this.Name = "Main";
             this.Text = "Main";
             this.Load += new System.EventHandler(this.Form_Load);
-            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.KeysDown);
-            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.KeysUp);
             this.GPBackground.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.KKey)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.DKey)).EndInit();
