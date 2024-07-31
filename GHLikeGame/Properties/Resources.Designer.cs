@@ -61,6 +61,15 @@ namespace GHLikeGame.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream BOFSong {
+            get {
+                return ResourceManager.GetStream("BOFSong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap D {
@@ -97,6 +106,44 @@ namespace GHLikeGame.Properties {
             get {
                 object obj = ResourceManager.GetObject("K", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to (500)/8\dfjk
+        ///dfjk
+        ///dk
+        ///fj
+        ///(400)
+        ///
+        ///
+        ///(500)
+        ///d
+        ///f
+        ///j
+        ///k
+        ///(750)
+        ///
+        ///
+        ///(500)
+        ///k
+        ///j
+        ///f
+        ///d
+        ///
+        ///(100)/12\
+        ///d
+        ///f
+        ///j
+        ///k
+        ///k
+        ///j
+        ///f
+        ///d.
+        /// </summary>
+        internal static string SongNotes {
+            get {
+                return ResourceManager.GetString("SongNotes", resourceCulture);
             }
         }
         

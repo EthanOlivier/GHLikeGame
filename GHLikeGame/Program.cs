@@ -2,6 +2,9 @@
 using System.IO;
 using System.Windows.Forms;
 using System.Media;
+using System.Runtime.CompilerServices;
+using GHLikeGame.Properties;
+using System.Text;
 
 namespace GHLikeGame
 {
@@ -17,9 +20,11 @@ namespace GHLikeGame
             Application.SetCompatibleTextRenderingDefault(false);
 
             IFileReading fileReading = new FileReading();
-            const string FILE_PATH = "C:\\Users\\Ethan\\source\\repos\\GHLikeGame\\GHLikeGame\\Resources\\SongNotes.txt";
-            StreamReader reader = new StreamReader(FILE_PATH);
-            SoundPlayer song = new SoundPlayer(@"C:\Users\Ethan\source\repos\GHTest\GHTest\Resources\tomp3.cc - Goukisan  Betrayal of Fear.wav");
+
+            SoundPlayer song = new SoundPlayer(Resources.BOFSong);
+
+            byte[] byteArray = Encoding.UTF8.GetBytes(Resources.SongNotes);
+            StreamReader reader = new StreamReader(new MemoryStream(byteArray));
 
             Application.Run(new Main(fileReading, reader, song));
         }

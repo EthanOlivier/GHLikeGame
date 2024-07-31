@@ -106,5 +106,11 @@
   <ItemGroup>
     <None Include="Resources\K.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\SongNotes.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\BOFSong.wav" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
